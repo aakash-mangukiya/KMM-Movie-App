@@ -65,6 +65,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
     debugImplementation(libs.compose.uiTooling)
 }
 
