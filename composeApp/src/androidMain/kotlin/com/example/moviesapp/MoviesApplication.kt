@@ -3,7 +3,6 @@ package com.example.moviesapp
 import android.app.Application
 import com.example.moviesapp.core.di.appModule
 import com.example.moviesapp.data.di.dataModule
-import com.example.moviesapp.di.viewModelsModule
 import com.example.moviesapp.domain.di.domainModule
 import com.example.moviesapp.presentation.di.presentationModule
 import org.koin.android.ext.koin.androidContext
@@ -21,8 +20,7 @@ class MoviesApplication : Application() {
                 appModule,
                 dataModule,
                 domainModule,
-                presentationModule,
-                viewModelsModule
+                presentationModule
             )
         }
     }

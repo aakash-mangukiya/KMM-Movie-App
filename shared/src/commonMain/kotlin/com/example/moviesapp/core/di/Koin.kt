@@ -8,7 +8,6 @@ import com.example.moviesapp.presentation.viewmodel.MovieDetailsViewModel
 import com.example.moviesapp.presentation.viewmodel.MovieListViewModel
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
-import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 import org.koin.mp.KoinPlatform
@@ -16,12 +15,6 @@ import org.koin.mp.KoinPlatform
 val appModule = module {
     single { KtorHttpClient.createHttpClient() }
 }
-
-val viewModelsModule = module {
-    viewModel { MovieListViewModel(get()) }
-    viewModel { MovieDetailsViewModel(get()) }
-}
-
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
@@ -29,8 +22,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
             appModule,
             dataModule,
             domainModule,
-            presentationModule,
-            viewModelsModule
+            presentationModule
         )
     }
 

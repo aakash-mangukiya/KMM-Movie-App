@@ -6,7 +6,6 @@ data class ColorPalette(
     val textColor: TextColor = TextColor(),
     val backgroundColor: BackgroundColor = BackgroundColor()
 )
-
 data class TextColor(
     val text_strong: Color = text_strong_color,
     val text_medium: Color = text_medium_color,
