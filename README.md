@@ -1,39 +1,66 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# MoviesApp - Kotlin Multiplatform (KMP)
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+A modern, cross-platform Movie application built with **Kotlin Multiplatform (KMP)**. This project demonstrates a shared business logic architecture across **Android (Jetpack Compose)** and **iOS (SwiftUI)**.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## 🚀 Features
+- **Shared Business Logic**: 100% of the networking, data mapping, and domain logic is shared.
+- **Android App**: Built using Jetpack Compose and Navigation3.
+- **iOS App**: Built using native SwiftUI, consuming shared ViewModels via Koin.
+- **Clean Architecture**: Strictly follows Clean Architecture principles (Data, Domain, Presentation layers).
+- **SOLID Principles**: Refactored to ensure high maintainability and testability.
 
-* [/shared](./shared/src) is for the code that will be shared between all targets in the project.
-  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
+## 🛠 Tech Stack
+- **Kotlin Multiplatform**: For sharing code between Android and iOS.
+- **Compose Multiplatform**: Used for the Android UI.
+- **SwiftUI**: Used for the native iOS UI.
+- **Koin**: Dependency Injection for both platforms.
+- **Ktor**: Multiplatform networking client.
+- **Kotlinx Serialization**: For JSON parsing and navigation.
+- **Coroutines & Flow**: Reactive state management.
+- **SKIE**: Enhanced Swift/Kotlin interoperability for Flows and Selections.
+- **Coil3**: Image loading for Compose.
 
-### Build and Run Android Application
+## 🏗 Project Architecture
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+The project is divided into three main layers in the `:shared` module:
 
-### Build and Run iOS Application
+### 1. Data Layer
+- **Repositories**: Implementation of data fetching from TMDB API using Ktor.
+- **Mappers**: Converts raw API responses (`ResponseDTO`) into clean Domain models.
+- **Models**: Serializable data classes for network requests.
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+### 2. Domain Layer
+- **Models**: Pure Kotlin data classes representing the business entities (e.g., `Movie`, `MovieDetails`).
+- **Repositories (Interfaces)**: Defines the contracts for data operations.
+- **UseCases**: Encapsulates specific business logic, such as combining movie details with credit information.
 
----
+### 3. Presentation Layer
+- **ViewModels**: Shared ViewModels using `androidx.lifecycle.ViewModel` for managing UI state.
+- **State Handling**: Centralized state management using `BaseStateHandler`.
+- **Interactors**: Middle-layer to bridge UseCases and ViewModels.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## 📱 Platform Implementation
+
+### Android (:composeApp)
+- Uses **Jetpack Compose** for building the UI.
+- Implements **Navigation3** for type-safe routing.
+- Uses **Koin-Android** for dependency injection at the application level.
+
+### iOS (:iosApp)
+- A native **SwiftUI** application.
+- Uses a `ViewModelWrapper` pattern to observe shared Kotlin `StateFlow`s as `@Published` properties.
+- Initializes Koin via a `getKoinInstance()` helper from the shared module.
+
+## 🛠 Setup & Installation
+
+### Requirements
+- **Android Studio Ladybug** or newer.
+- **Xcode 15+** (for iOS).
+- **JDK 17+**.
+
+### Build Instructions
+1. Clone the repository.
+2. Open the project in Android Studio.
+3. **Sync Gradle**: `File > Sync Project with Gradle Files`.
+4. **Run Android**: Select the `composeApp` configuration and run on an emulator or device.
+5. **Run iOS**: Open `iosApp/iosApp.xcworkspace` in Xcode or run the `iosApp` configuration from Android Studio (requires a Mac).
