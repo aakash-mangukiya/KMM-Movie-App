@@ -6,6 +6,7 @@ A modern, cross-platform Movie application built with **Kotlin Multiplatform (KM
 - **Shared Business Logic**: 100% of the networking, data mapping, and domain logic is shared.
 - **Android App**: Built using Jetpack Compose and Navigation3.
 - **iOS App**: Built using native SwiftUI, consuming shared ViewModels via Koin.
+- **Infinite Scrolling / Pagination**: Scalable pagination logic implemented in the shared layer to handle large data sets efficiently.
 - **Clean Architecture**: Strictly follows Clean Architecture principles (Data, Domain, Presentation layers).
 - **SOLID Principles**: Refactored to ensure high maintainability and testability.
 
@@ -37,7 +38,7 @@ The project is divided into three main layers in the `:shared` module:
 ### 3. Presentation Layer
 - **ViewModels**: Shared ViewModels using `androidx.lifecycle.ViewModel` for managing UI state.
 - **State Handling**: Centralized state management using `BaseStateHandler`.
-- **Interactors**: Middle-layer to bridge UseCases and ViewModels.
+- **Interactors**: Middle-layer to bridge UseCases and ViewModels, managing complex presentation logic like pagination to keep ViewModels clean and platform-agnostic.
 
 ## 📱 Platform Implementation
 
@@ -49,6 +50,7 @@ The project is divided into three main layers in the `:shared` module:
 ### iOS (:iosApp)
 - A native **SwiftUI** application.
 - Uses a `ViewModelWrapper` pattern to observe shared Kotlin `StateFlow`s as `@Published` properties.
+- Leverages **SKIE**'s `SkieSwiftFlow` and `asAsyncSequence()` for seamless Kotlin Flow consumption in Swift concurrency.
 - Initializes Koin via a `getKoinInstance()` helper from the shared module.
 
 ## 🛠 Setup & Installation

@@ -1,0 +1,12 @@
+"movies.title" = "Movies";
+"movies.loading" = "Loading";
+"movies.error.generic" = "Something went wrong";
+"common.retry" = "Retry";
+"movies.empty.title" = "No Movies";
+"movies.empty.message" = "Try again in a moment or tap retry.";
+"movie.details.director" = "Director";
+"movie.details.cast" = "Cast:";
+"movie.details.rate" = "Rate";
+"movie.details.revenue" = "Revenue";
+"movie.details.budget" = "Budget";
+"movie.details.writer" = "Writer";

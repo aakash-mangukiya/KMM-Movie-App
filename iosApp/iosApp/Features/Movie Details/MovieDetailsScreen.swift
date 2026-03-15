@@ -8,33 +8,6 @@
 import SwiftUI
 import Shared
 
-extension MovieDetailsScreen {
-    
-    @MainActor
-    class MovieDetailsViewModelWrapper: ObservableObject {
-        
-        let movieDetailsViewModel: MovieDetailsViewModel
-        @Published var movieDetailsUiState: MovieDetailsUiState
-        
-        init() {
-            let koin = KoinKt.getKoinInstance()
-            self.movieDetailsViewModel = koin.getMovieDetailsViewModel()
-            self.movieDetailsUiState = movieDetailsViewModel.uiState.value
-            
-            Task {
-                let sequence = SkieSwiftFlow(movieDetailsViewModel.uiState)
-                for await state in sequence {
-                    self.movieDetailsUiState = state
-                }
-            }
-        }
-        
-        func onEvent(_ event: MovieDetailsEvent) {
-            movieDetailsViewModel.handleEvent(event: event)
-        }
-    }
-}
-
 struct MovieDetailsScreen: View {
     
     @StateObject private var viewModel = MovieDetailsViewModelWrapper()
@@ -45,20 +18,37 @@ struct MovieDetailsScreen: View {
         
         Group {
             if viewModel.movieDetailsUiState.isLoading {
-                ProgressView("Loading...")
+                ProgressView(String(localized: "movies.loading"))
             } else if let movieDetails = viewModel.movieDetailsUiState.movieDetails {
                 ScrollView {
                     
                     VStack(alignment: .leading, spacing: 16) {
                         
-                        AsyncImage(url: URL(string: movieDetails.image)) { image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
-                            ProgressView()
+                        AsyncImage(url: URL(string: movieDetails.image)) { phase in
+                            switch phase {
+                            case .empty:
+                                ZStack {
+                                    Color.gray.opacity(0.1)
+                                    ProgressView()
+                                }
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            case .failure:
+                                ZStack {
+                                    Color.gray.opacity(0.1)
+                                    Image(systemName: "photo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(.secondary)
+                                        .padding(16)
+                                }
+                            @unknown default:
+                                EmptyView()
+                            }
                         }
-                        .frame(maxWidth: .infinity, maxHeight: 250)
+                        .frame(maxWidth: .infinity, minHeight: 250)
                         .clipped()
                         
                         VStack(alignment: .leading, spacing: 12) {
@@ -77,21 +67,21 @@ struct MovieDetailsScreen: View {
                             HStack {
                                 
                                 VStack(alignment: .leading) {
-                                    Text("Director")
+                                    Text(String(localized: "movie.details.director"))
                                         .font(.headline)
                                     Text(movieDetails.director)
                                 }
-                                
-                                Spacer()
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 VStack(alignment: .leading) {
-                                    Text("Writer")
+                                    Text(String(localized: "movie.details.writer"))
                                         .font(.headline)
                                     Text(movieDetails.writer)
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             
-                            Text("Cast:").font(.headline)
+                            Text(String(localized: "movie.details.cast")).font(.headline)
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack() {
                                     ForEach(movieDetails.cast, id: \.self) { cast in
@@ -103,13 +93,13 @@ struct MovieDetailsScreen: View {
                             HStack(alignment: .top, spacing: 0) {
                                 
                                 InfoRowView(
-                                    title: "Rate",
+                                    title: String(localized: "movie.details.rate"),
                                     value: String(format: "%.1f / 10",(movieDetails.voteAverage))
                                 )
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 InfoRowView(
-                                    title: "Status",
+                                    title: String(localized: "movie.details.status"),
                                     value: movieDetails.status
                                 )
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -118,13 +108,13 @@ struct MovieDetailsScreen: View {
                             HStack(alignment: .top, spacing: 0) {
                                 
                                 InfoRowView(
-                                    title: "Revenue",
+                                    title: String(localized: "movie.details.revenue"),
                                     value: "\(movieDetails.revenue)"
                                 )
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 InfoRowView(
-                                    title: "Budget",
+                                    title: String(localized: "movie.details.budget"),
                                     value: "\(movieDetails.budget)"
                                 )
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -141,63 +131,6 @@ struct MovieDetailsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.onEvent(MovieDetailsEvent.LoadMovieDetails(movieId: movie.id))
-        }
-    }
-}
-
-struct CastCardView: View {
-    
-    let cast: Cast_
-    
-    var body: some View {
-        
-        VStack(alignment: .leading) {
-            
-            AsyncImage(url: URL(string: cast.profilePath)) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(width: 140, height: 150)
-            .clipped()
-            .cornerRadius(8, corners: [.topLeft, .topRight])
-            
-            Text(cast.name)
-                .font(.headline)
-                .lineLimit(1)
-                .padding(.horizontal, 4)
-            
-            Text(cast.character)
-                .font(.subheadline)
-                .foregroundColor(.gray)
-                .lineLimit(1)
-                .padding(.horizontal, 4)
-                .padding(.bottom, 4)
-        }
-        .frame(width: 140)
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 3)
-    }
-}
-
-struct InfoRowView: View {
-    
-    let title: String
-    let value: String
-    
-    var body: some View {
-        
-        VStack(alignment: .leading, spacing: 4) {
-            
-            Text(value)
-                .font(.headline)
-            
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(.gray)
         }
     }
 }
