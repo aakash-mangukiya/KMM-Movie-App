@@ -1,14 +1,7 @@
 # MoviesApp - Kotlin Multiplatform (KMP)
 
 A modern, cross-platform Movie application built with **Kotlin Multiplatform (KMP)**. This project demonstrates a shared business logic architecture across **Android (Jetpack Compose)** and **iOS (SwiftUI)**.
-
-## 📱 App Walkthrough
-Check out the app in action on both Android and iOS:
-https://github.com/user-attachments/assets/media/App%20walkthrough%20on%20Android%20&%20iOS.mov
-
-> [!NOTE]
-> If the video above doesn't load, you can find it in the `media/` folder.
-> 
+ 
 ## 🚀 Features
 - **Shared Business Logic**: 100% of the networking, data mapping, and domain logic is shared.
 - **Android App**: Built using Jetpack Compose and Navigation3.
