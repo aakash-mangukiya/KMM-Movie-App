@@ -1,10 +1,42 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.skie)
+}
+
+// Read the local.properties file
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        load(file.inputStream())
+    }
+}
+
+val apiKey = localProperties.getProperty("API_KEY") ?: "default_value"
+
+val generateSharedConfig by tasks.registering {
+    val apiKeyProperty = objects.property<String>().convention(apiKey)
+    val outputDirProperty = objects.directoryProperty().convention(layout.buildDirectory.dir("generated/config/src/commonMain/kotlin"))
+
+    inputs.property("apiKey", apiKeyProperty)
+    outputs.dir(outputDirProperty)
+
+    doLast {
+        val outDir = outputDirProperty.get().asFile
+        val configFile = File(outDir, "SharedConfig.kt")
+        configFile.parentFile.mkdirs()
+        configFile.writeText("""
+            package com.example.moviesapp.generated
+            
+            object SharedConfig {
+                const val API_KEY = "${apiKeyProperty.get()}"
+            }
+        """.trimIndent())
+    }
 }
 
 kotlin {
@@ -45,6 +77,13 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+    }
+
+    sourceSets {
+        commonMain.configure {
+            // Tell Kotlin to look at our generated folder
+            kotlin.srcDir(generateSharedConfig.map { it.outputs.files.asPath })
         }
     }
 }

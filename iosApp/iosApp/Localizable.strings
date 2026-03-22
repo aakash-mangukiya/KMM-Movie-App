@@ -6,6 +6,7 @@
 "movies.empty.message" = "Try again in a moment or tap retry.";
 "movie.details.director" = "Director";
 "movie.details.cast" = "Cast:";
+"movie.details.similar" = "Similar Movies:";
 "movie.details.rate" = "Rate";
 "movie.details.revenue" = "Revenue";
 "movie.details.budget" = "Budget";

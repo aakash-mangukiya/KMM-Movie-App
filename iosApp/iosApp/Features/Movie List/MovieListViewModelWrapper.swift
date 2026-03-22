@@ -17,7 +17,7 @@ class MovieListViewModelWrapper: ObservableObject {
     init() {
         let koin = KoinKt.getKoinInstance()
         self.movieListViewModel = koin.getMovieListViewModel()
-        self.movieUiState = MovieUiState(isLoading: false, movies: [], error: nil, currentPage: 1, isEndReached: false)
+        self.movieUiState = MovieUiState(isLoading: false, movies: [], nowPlayingMovies: [], error: nil, currentPage: 1, isEndReached: false)
         
         Task {
             let sequence = SkieSwiftFlow(movieListViewModel.uiState)

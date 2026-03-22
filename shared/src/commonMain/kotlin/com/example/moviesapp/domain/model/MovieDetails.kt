@@ -15,7 +15,8 @@ data class MovieDetails(
     val revenue: Int,
     val releaseDate: String,
     val status: String,
-    val runtime: Int
+    val runtime: Int,
+    val similarMovies: List<Movie>
 )
 
 data class Cast(

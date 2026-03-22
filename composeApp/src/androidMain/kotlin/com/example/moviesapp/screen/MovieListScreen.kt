@@ -36,6 +36,7 @@ import coil3.compose.AsyncImage
 import com.example.moviesapp.R
 import com.example.moviesapp.components.ErrorView
 import com.example.moviesapp.components.LoaderIndicator
+import com.example.moviesapp.components.MovieCarousel
 import com.example.moviesapp.domain.model.Movie
 import com.example.moviesapp.presentation.events.MovieListEvent
 import com.example.moviesapp.presentation.state.MovieUiState
@@ -95,12 +96,15 @@ private fun MovieList(
                     color = colorProvider.backgroundColor.bg_strong
                 )
             }
+
             uiState.error.isNullOrEmpty().not() -> {
                 ErrorView(
-                    error = uiState.error ?: "An error occurred while fetching movies. Please try again.",
+                    error = uiState.error
+                        ?: "An error occurred while fetching movies. Please try again.",
                     onRetry = onLoadNextPage
                 )
             }
+
             else -> {
                 LazyColumn(
                     modifier = Modifier
@@ -110,6 +114,13 @@ private fun MovieList(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(space = spacingProvider.spacing_4)
                 ) {
+
+                    item {
+                        MovieCarousel(movies = uiState.nowPlayingMovies) { movie ->
+                            onNavigateToDetails(movie.id, movie.title)
+                        }
+                    }
+
                     itemsIndexed(
                         items = uiState.movies,
                         key = { _, movie -> "${movie.id}_${movie.title}" }
@@ -222,6 +233,7 @@ fun MovieListScreenPreview() {
                         lang = "en",
                         overview = "A man living in self-imposed exile on a remote island rescues a young girl from a violent storm, setting off a chain of events that forces him out of seclusion to protect her from enemies tied to his past.",
                         image = "",
+                        posterImage = "",
                         releaseDate = "2026-01-28"
                     ),
                     Movie(
@@ -230,6 +242,7 @@ fun MovieListScreenPreview() {
                         lang = "en",
                         overview = "An uproarious version of history that proves nothing is sacred – not even the Roman Empire, the French Revolution and the Spanish Inquisition.",
                         image = "",
+                        posterImage = "",
                         releaseDate = "1981-06-12"
                     )
                 )

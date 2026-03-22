@@ -23,7 +23,8 @@ fun MovieDetailsResponse.toMovieDetailDomain(): MovieDetails {
         revenue = revenue ?: 0,
         releaseDate = releaseDate.orEmpty(),
         status = status.orEmpty(),
-        runtime = runtime ?: 0
+        runtime = runtime ?: 0,
+        similarMovies = emptyList()
     )
 }
 

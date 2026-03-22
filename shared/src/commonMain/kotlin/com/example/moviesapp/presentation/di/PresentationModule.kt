@@ -14,6 +14,6 @@ val presentationModule = module {
     viewModel { MovieDetailsViewModel(get()) }
     single { MovieListStateHandler() }
     factory { MovieDetailsStateHandler() }
-    single { MovieListInteractor(get(), get()) }
+    single { MovieListInteractor(get(), get(), get()) }
     factory { MovieDetailInteractor(get(), get()) }
 }

@@ -39,7 +39,9 @@ import coil3.compose.AsyncImage
 import com.example.moviesapp.R
 import com.example.moviesapp.components.CastItem
 import com.example.moviesapp.components.ErrorView
+import com.example.moviesapp.components.InfoView
 import com.example.moviesapp.components.LoaderIndicator
+import com.example.moviesapp.components.MovieVerticalItem
 import com.example.moviesapp.domain.model.Cast
 import com.example.moviesapp.domain.model.MovieDetails
 import com.example.moviesapp.presentation.events.MovieDetailsEvent
@@ -130,24 +132,26 @@ private fun MovieDetails(
 
             uiState.error.isNullOrEmpty().not() -> {
                 ErrorView(
-                    error = uiState.error ?: "An error occurred while fetching movie details. Please try again.",
+                    error = uiState.error
+                        ?: "An error occurred while fetching movie details. Please try again.",
                     onRetry = { onRetry() }
                 )
             }
 
             else -> {
-                Column(modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(padding)
-                    .fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(padding)
+                        .fillMaxWidth()
                 ) {
 
                     ConstraintLayout(
                         modifier = Modifier.fillMaxWidth()
                     ) {
 
-                        val (img, title, tagline, description, director, txtDirector, writer, txtWriter, txtCast, cast, txtRate, rate, txtStatus, status) = createRefs()
-                        val (txtRevenue, revenue, txtBudget, budget) = createRefs()
+                        val (img, title, tagline, description, director, writer, txtCast, cast, rate, status) = createRefs()
+                        val (revenue, budget, txtSimilarMovie, similarMovies) = createRefs()
                         val guideline = createGuidelineFromStart(0.5f)
 
                         AsyncImage(
@@ -206,57 +210,31 @@ private fun MovieDetails(
                             overflow = TextOverflow.Ellipsis,
                         )
 
-                        Text(
+                        InfoView(
                             modifier = Modifier.constrainAs(director) {
                                 top.linkTo(description.bottom, margin = spacingProvider.spacing_4)
                                 start.linkTo(parent.start, margin = spacingProvider.spacing_2)
                                 end.linkTo(guideline, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            text = uiState.movieDetails?.director.orEmpty(),
-                            style = typographyProvider.subHeadLine,
-                            overflow = TextOverflow.Ellipsis,
+                            title = "Director",
+                            value = uiState.movieDetails?.director.orEmpty(),
                         )
 
-                        Text(
-                            modifier = Modifier.constrainAs(txtDirector) {
-                                top.linkTo(director.bottom, margin = spacingProvider.spacing_1)
-                                start.linkTo(parent.start, margin = spacingProvider.spacing_2)
-                                end.linkTo(guideline, margin = spacingProvider.spacing_2)
-                                width = Dimension.fillToConstraints
-                            },
-                            text = "Director",
-                            style = typographyProvider.label,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-
-                        Text(
+                        InfoView(
                             modifier = Modifier.constrainAs(writer) {
                                 top.linkTo(description.bottom, margin = spacingProvider.spacing_4)
                                 start.linkTo(guideline)
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            text = uiState.movieDetails?.writer.orEmpty(),
-                            style = typographyProvider.subHeadLine,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-
-                        Text(
-                            modifier = Modifier.constrainAs(txtWriter) {
-                                top.linkTo(writer.bottom, margin = spacingProvider.spacing_1)
-                                start.linkTo(guideline)
-                                end.linkTo(parent.end, margin = spacingProvider.spacing_2)
-                                width = Dimension.fillToConstraints
-                            },
-                            text = "Writer",
-                            style = typographyProvider.label,
-                            overflow = TextOverflow.Ellipsis,
+                            title = "Writer",
+                            value = uiState.movieDetails?.writer.orEmpty(),
                         )
 
                         Text(
                             modifier = Modifier.constrainAs(txtCast) {
-                                top.linkTo(txtDirector.bottom, margin = spacingProvider.spacing_4)
+                                top.linkTo(director.bottom, margin = spacingProvider.spacing_4)
                                 start.linkTo(parent.start, margin = spacingProvider.spacing_2)
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
@@ -284,101 +262,82 @@ private fun MovieDetails(
                             }
                         }
 
-                        Text(
+                        InfoView(
                             modifier = Modifier.constrainAs(rate) {
                                 top.linkTo(cast.bottom, margin = spacingProvider.spacing_4)
                                 start.linkTo(parent.start, margin = spacingProvider.spacing_2)
                                 end.linkTo(guideline, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            text = "${uiState.movieDetails?.voteAverage} / 10",
-                            style = typographyProvider.subHeadLine,
-                            overflow = TextOverflow.Ellipsis,
+                            title = "Rate",
+                            value = "${uiState.movieDetails?.voteAverage} / 10"
                         )
 
-                        Text(
-                            modifier = Modifier.constrainAs(txtRate) {
-                                top.linkTo(rate.bottom, margin = spacingProvider.spacing_1)
-                                start.linkTo(parent.start, margin = spacingProvider.spacing_2)
-                                end.linkTo(guideline, margin = spacingProvider.spacing_2)
-                                width = Dimension.fillToConstraints
-                            },
-                            text = "Rate",
-                            style = typographyProvider.label,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-
-                        Text(
+                        InfoView(
                             modifier = Modifier.constrainAs(status) {
                                 top.linkTo(cast.bottom, margin = spacingProvider.spacing_4)
                                 start.linkTo(guideline)
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            text = uiState.movieDetails?.status.orEmpty(),
-                            style = typographyProvider.subHeadLine,
-                            overflow = TextOverflow.Ellipsis,
+                            title = "Status",
+                            value = uiState.movieDetails?.status.orEmpty()
                         )
 
-                        Text(
-                            modifier = Modifier.constrainAs(txtStatus) {
-                                top.linkTo(status.bottom, margin = spacingProvider.spacing_1)
-                                start.linkTo(guideline)
-                                end.linkTo(parent.end, margin = spacingProvider.spacing_2)
-                                width = Dimension.fillToConstraints
-                            },
-                            text = "Status",
-                            style = typographyProvider.label,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-
-                        Text(
+                        InfoView(
                             modifier = Modifier.constrainAs(revenue) {
-                                top.linkTo(txtRate.bottom, margin = spacingProvider.spacing_4)
+                                top.linkTo(rate.bottom, margin = spacingProvider.spacing_4)
                                 start.linkTo(parent.start, margin = spacingProvider.spacing_2)
                                 end.linkTo(guideline, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            text = "${uiState.movieDetails?.revenue}",
-                            style = typographyProvider.subHeadLine,
-                            overflow = TextOverflow.Ellipsis,
+                            title = "Revenue",
+                            value = "${uiState.movieDetails?.revenue}"
                         )
 
-                        Text(
-                            modifier = Modifier.constrainAs(txtRevenue) {
-                                top.linkTo(revenue.bottom, margin = spacingProvider.spacing_1)
-                                start.linkTo(parent.start, margin = spacingProvider.spacing_2)
-                                end.linkTo(guideline, margin = spacingProvider.spacing_2)
-                                width = Dimension.fillToConstraints
-                            },
-                            text = "Revenue",
-                            style = typographyProvider.label,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-
-                        Text(
+                        InfoView(
                             modifier = Modifier.constrainAs(budget) {
-                                top.linkTo(txtStatus.bottom, margin = spacingProvider.spacing_4)
+                                top.linkTo(status.bottom, margin = spacingProvider.spacing_4)
                                 start.linkTo(guideline)
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            text = "${uiState.movieDetails?.budget}",
+                            title = "Budget",
+                            value = "${uiState.movieDetails?.budget}"
+                        )
+
+                        Text(
+                            modifier = Modifier.constrainAs(txtSimilarMovie) {
+                                top.linkTo(revenue.bottom, margin = spacingProvider.spacing_4)
+                                start.linkTo(parent.start, margin = spacingProvider.spacing_2)
+                                end.linkTo(parent.end, margin = spacingProvider.spacing_2)
+                                width = Dimension.fillToConstraints
+                            },
+                            text = "Similar Movies: ",
                             style = typographyProvider.subHeadLine,
                             overflow = TextOverflow.Ellipsis,
                         )
 
-                        Text(
-                            modifier = Modifier.constrainAs(txtBudget) {
-                                top.linkTo(budget.bottom, margin = spacingProvider.spacing_1)
-                                start.linkTo(guideline)
-                                end.linkTo(parent.end, margin = spacingProvider.spacing_2)
+                        LazyRow(
+                            modifier = Modifier.constrainAs(similarMovies) {
+                                top.linkTo(
+                                    txtSimilarMovie.bottom,
+                                    margin = spacingProvider.spacing_1
+                                )
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
                                 width = Dimension.fillToConstraints
                             },
-                            text = "Budget",
-                            style = typographyProvider.label,
-                            overflow = TextOverflow.Ellipsis,
-                        )
+                            contentPadding = PaddingValues(all = spacingProvider.spacing_2),
+                            horizontalArrangement = Arrangement.spacedBy(space = spacingProvider.spacing_4)
+                        ) {
+                            items(
+                                items = uiState.movieDetails?.similarMovies ?: emptyList(),
+                                key = { movie -> "${movie.id}_${movie.title}" }
+                            ) { movie ->
+                                MovieVerticalItem(movie = movie, onNavigateToDetails = { _, _ -> })
+                            }
+                        }
                     }
                 }
             }
@@ -419,6 +378,7 @@ private fun PreviewMovieDetailScreen() {
                     runtime = 102,
                     voteAverage = 7.5,
                     tagLine = "Her safety. His mission.",
+                    similarMovies = emptyList()
                 )
             ),
             movieName = "Shelter",

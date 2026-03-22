@@ -6,5 +6,6 @@ data class Movie(
     val lang:String,
     val overview: String,
     val image:String,
+    val posterImage: String,
     val releaseDate:String,
 )

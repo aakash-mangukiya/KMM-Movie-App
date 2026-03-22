@@ -38,6 +38,15 @@ struct MovieListScreen: View {
                 } else {
                     LazyVStack(alignment: .leading, spacing:16){
                         
+                        HStack {
+                            ParallaxCarouselView(
+                                movies: viewModel.movieUiState.nowPlayingMovies,
+                                onItemClick: { movie in
+                                    navigationPath.append(movie)
+                                }
+                            )
+                        }
+                        
                         ForEach(viewModel.movieUiState.movies, id: \.id){ movie in
                             MovieRow(movie: movie)
                                 .onTapGesture {

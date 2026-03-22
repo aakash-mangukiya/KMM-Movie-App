@@ -1,19 +1,22 @@
 //
-// Created by Aakash Mangukiya on 15/03/26.
+//  MovieRow.swift
+//  iosApp
+//
+//  Created by Aakash Mangukiya on 08/03/26.
 //
 
 import SwiftUI
 import Shared
 
-struct CastCardView: View {
-
-    let cast: Cast_
-
+struct MovieVerticalRow: View {
+    
+    let movie: Movie_
+    
     var body: some View {
-
+        
         VStack(alignment: .leading) {
-
-            AsyncImage(url: URL(string: cast.profilePath)) { phase in
+            
+            AsyncImage(url: URL(string: movie.image)) { phase in
                 switch phase {
                 case .empty:
                     ZStack {
@@ -37,17 +40,11 @@ struct CastCardView: View {
                     EmptyView()
                 }
             }
-            .frame(width: 140, height: 150)
+            .frame(width: 140, height: 160)
             .clipped()
-
-            Text(cast.name)
+            
+            Text(movie.title)
                 .font(.headline)
-                .lineLimit(1)
-                .padding(.horizontal, 4)
-
-            Text(cast.character)
-                .font(.subheadline)
-                .foregroundColor(.gray)
                 .lineLimit(1)
                 .padding(.horizontal, 4)
                 .padding(.bottom, 4)

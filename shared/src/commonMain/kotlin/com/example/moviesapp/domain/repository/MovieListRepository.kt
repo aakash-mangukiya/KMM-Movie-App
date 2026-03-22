@@ -5,4 +5,5 @@ import com.example.moviesapp.domain.model.Movie
 
 interface MovieListRepository {
     suspend fun getMovieList(page: Int): Result<List<Movie>?>
+    suspend fun getNowPlayingMovies(): Result<List<Movie>?>
 }

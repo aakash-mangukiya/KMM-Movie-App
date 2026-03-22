@@ -119,6 +119,15 @@ struct MovieDetailsScreen: View {
                                 )
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             }
+                            
+                            Text(String(localized: "movie.details.similar")).font(.headline)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack() {
+                                    ForEach(movieDetails.similarMovies, id: \.self) { movie in
+                                        MovieVerticalRow(movie: movie)
+                                    }
+                                }.padding(.vertical)
+                            }
                         }
                         .padding()
                     }

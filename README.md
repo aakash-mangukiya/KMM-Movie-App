@@ -66,3 +66,8 @@ The project is divided into three main layers in the `:shared` module:
 3. **Sync Gradle**: `File > Sync Project with Gradle Files`.
 4. **Run Android**: Select the `composeApp` configuration and run on an emulator or device.
 5. **Run iOS**: Open `iosApp/iosApp.xcworkspace` in Xcode or run the `iosApp` configuration from Android Studio (requires a Mac).
+
+### Running the app
+1. Open the project's root folder in Android Studio.
+2. Locate the `local.properties` file.
+3. Add the following line: `API_KEY=your_api_key_generated_in_tmdb`.

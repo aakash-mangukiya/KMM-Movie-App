@@ -3,12 +3,14 @@ package com.example.moviesapp.presentation.interactor
 import com.example.moviesapp.core.onError
 import com.example.moviesapp.core.onSuccess
 import com.example.moviesapp.domain.usecase.GetMovieListUseCase
+import com.example.moviesapp.domain.usecase.GetNowPlayingMoviesListUseCase
 import com.example.moviesapp.presentation.events.MovieListEvent
 import com.example.moviesapp.presentation.state.MovieListStateHandler
 
 class MovieListInteractor(
     private val stateHandler: MovieListStateHandler,
-    private val getMovieListUseCase: GetMovieListUseCase
+    private val getMovieListUseCase: GetMovieListUseCase,
+    private val getNowPlayingMoviesListUseCase: GetNowPlayingMoviesListUseCase
 ) {
 
     fun subscribeToUiState() = stateHandler.uiState
@@ -28,6 +30,7 @@ class MovieListInteractor(
         }
 
         fetchMovies(1)
+        fetchNowPlayingMovies()
     }
 
     private suspend fun loadNextPage() {
@@ -52,6 +55,27 @@ class MovieListInteractor(
                         isLoading = false,
                         movies = if (page == 1) movies else this.movies + movies,
                         currentPage = page,
+                        isEndReached = movies.isEmpty()
+                    )
+                }
+            }.onError { error ->
+                stateHandler.updateUiState {
+                    copy(
+                        isLoading = false,
+                        error = error.message
+                    )
+                }
+            }
+    }
+
+    private suspend fun fetchNowPlayingMovies() {
+        getNowPlayingMoviesListUseCase()
+            .onSuccess { result ->
+                val movies = result ?: emptyList()
+                stateHandler.updateUiState {
+                    copy(
+                        isLoading = false,
+                        nowPlayingMovies = movies.take(5),
                         isEndReached = movies.isEmpty()
                     )
                 }
