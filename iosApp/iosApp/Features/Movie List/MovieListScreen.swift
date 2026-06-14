@@ -12,6 +12,7 @@ struct MovieListScreen: View {
     
     @StateObject private var viewModel = MovieListViewModelWrapper()
     @State private var navigationPath = NavigationPath()
+    @State private var showsProfileScreen = false
     
     var body: some View {
         
@@ -71,6 +72,18 @@ struct MovieListScreen: View {
             }
             .navigationTitle(String(localized: "movies.title"))
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showsProfileScreen = true
+                    } label: {
+                        Image(systemName: "person.crop.circle")
+                    }
+                }
+            }
+            .navigationDestination(isPresented: $showsProfileScreen) {
+                ProfileScreen()
+            }
             .navigationDestination(for: Movie_.self) { movie in
                 MovieDetailsScreen(movie: movie)
             }

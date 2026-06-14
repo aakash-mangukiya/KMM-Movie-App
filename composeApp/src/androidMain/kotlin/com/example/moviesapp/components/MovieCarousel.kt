@@ -76,6 +76,7 @@ private fun CarouselItem(
             }
     ) {
         AsyncImage(
+            modifier = Modifier.matchParentSize(),
             model = movie.posterImage,
             contentScale = ContentScale.Crop,
             contentDescription = movie.title,

@@ -8,5 +8,10 @@ sealed interface AppNavKey : NavKey {
     data object MovieList : AppNavKey
 
     @Serializable
-    data class MovieDetails(val movieId: Int, val movieName:String) : AppNavKey
+    data class MovieDetails(val movieId: Int, val movieName:String)
+        : AppNavKey
+
+    @Serializable
+    data object Profile : AppNavKey
 }
+

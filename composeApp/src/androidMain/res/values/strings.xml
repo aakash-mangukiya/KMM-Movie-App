@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">MoviesApp</string>
+
+    <string name="movie_list_title">Movies</string>
+    <string name="profile_icon_content_description">Profile</string>
+    <string name="error_fetch_movies">An error occurred while fetching movies. Please try again.</string>
+
+    <string name="error_fetch_details">An error occurred while fetching movie details. Please try again.</string>
+    <string name="label_director">Director</string>
+    <string name="label_writer">Writer</string>
+    <string name="label_cast">Cast: </string>
+    <string name="label_rate">Rate</string>
+    <string name="label_status">Status</string>
+    <string name="label_revenue">Revenue</string>
+    <string name="label_budget">Budget</string>
+    <string name="label_similar_movies">Similar Movies: </string>
+    <string name="btn_retry">Retry</string>
+
+    <string name="profile_title">Profile</string>
+    <string name="profile_image_content_description">profile image</string>
+    <string name="label_first_name">First Name</string>
+    <string name="label_last_name">Last Name</string>
+    <string name="label_email">Email</string>
+    <string name="label_phone_number">Phone Number</string>
+    <string name="btn_save">SAVE</string>
+    <string name="btn_gallery">Gallery</string>
+    <string name="btn_camera">Camera</string>
+    <string name="back">Back</string>
+
 </resources>

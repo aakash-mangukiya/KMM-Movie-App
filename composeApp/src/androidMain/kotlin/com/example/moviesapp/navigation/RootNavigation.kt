@@ -12,6 +12,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.moviesapp.screen.MovieDetailsScreen
 import com.example.moviesapp.screen.MovieListScreen
+import com.example.moviesapp.screen.ProfileScreen
 
 @Composable
 fun RootNavigation() {
@@ -44,16 +45,22 @@ fun RootNavigation() {
         entryProvider = entryProvider {
             entry<AppNavKey.MovieList> {
                 MovieListScreen(
+                    onNavigateToProfile = { backStack.add(AppNavKey.Profile) },
                     onNavigateToDetails = { movieId, movieName ->
                         backStack.add(AppNavKey.MovieDetails(movieId, movieName))
                     }
                 )
             }
-            entry<AppNavKey.MovieDetails> {  key ->
+            entry<AppNavKey.MovieDetails> { key ->
                 MovieDetailsScreen(
                     movieId = key.movieId,
                     movieName = key.movieName,
-                    onNavigationBack = { backStack.removeLastOrNull()}
+                    onNavigationBack = { backStack.removeLastOrNull() }
+                )
+            }
+            entry<AppNavKey.Profile> {
+                ProfileScreen(
+                    onNavigationBack = { backStack.removeLastOrNull() }
                 )
             }
         }

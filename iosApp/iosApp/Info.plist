@@ -4,5 +4,9 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow access to the camera so you can capture a profile image.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to your photo library so you can choose a profile image.</string>
 </dict>
 </plist>

@@ -21,6 +21,9 @@ coil3 = "3.4.0"
 nav3Core = "1.0.1"
 lifecycleViewmodelNav3 = "2.10.0"
 skie = "0.10.11"
+ucrop = "2.2.11"
+androidx-datastore = "1.2.1"
+okio = "3.17.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -61,6 +64,9 @@ androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runt
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
 skie-annotations = { module = "co.touchlab.skie:configuration-annotations", version.ref = "skie" }
+ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
+androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-datastore" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

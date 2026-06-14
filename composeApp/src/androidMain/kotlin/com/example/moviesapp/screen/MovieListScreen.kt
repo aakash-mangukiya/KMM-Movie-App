@@ -2,6 +2,7 @@
 
 package com.example.moviesapp.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -25,8 +27,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,11 +56,13 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun MovieListScreen(
     viewModel: MovieListViewModel = koinViewModel(),
+    onNavigateToProfile: () -> Unit = {},
     onNavigateToDetails: (movieId: Int, movieName: String) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
     MovieList(
         uiState = uiState,
+        onNavigateToProfile = onNavigateToProfile,
         onNavigateToDetails = onNavigateToDetails,
         onLoadNextPage = { viewModel.handleEvent(MovieListEvent.LoadNextPage) }
     )
@@ -64,8 +71,9 @@ fun MovieListScreen(
 @Composable
 private fun MovieList(
     uiState: MovieUiState,
+    onNavigateToProfile: () -> Unit,
     onNavigateToDetails: (movieId: Int, movieName: String) -> Unit,
-    onLoadNextPage: () -> Unit = {}
+    onLoadNextPage: () -> Unit = {},
 ) {
     val spacingProvider = LocalSpacingProvider.current
     val typographyProvider = LocalTypographyProvider.current
@@ -78,14 +86,26 @@ private fun MovieList(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Movies",
+                        text = stringResource(R.string.movie_list_title),
                         style = typographyProvider.titleMedium,
                         color = colorProvider.textColor.text_white
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = colorProvider.backgroundColor.bg_strong
-                )
+                ),
+                actions = {
+                    IconButton(
+                        onClick = {
+                            onNavigateToProfile()
+                        }
+                    ) {
+                        Image(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_profile),
+                            contentDescription = stringResource(R.string.profile_icon_content_description)
+                        )
+                    }
+                },
             )
         }
     ) { padding ->
@@ -100,7 +120,7 @@ private fun MovieList(
             uiState.error.isNullOrEmpty().not() -> {
                 ErrorView(
                     error = uiState.error
-                        ?: "An error occurred while fetching movies. Please try again.",
+                        ?: stringResource(R.string.error_fetch_movies),
                     onRetry = onLoadNextPage
                 )
             }
@@ -225,6 +245,8 @@ fun MovieListScreenPreview() {
 
     MovieAppTheme {
         MovieList(
+            onNavigateToProfile = {},
+            onNavigateToDetails = { _, _ -> },
             uiState = MovieUiState(
                 movies = listOf(
                     Movie(
@@ -245,9 +267,28 @@ fun MovieListScreenPreview() {
                         posterImage = "",
                         releaseDate = "1981-06-12"
                     )
+                ),
+                nowPlayingMovies =  listOf(
+                    Movie(
+                        id = 12344,
+                        title = "Shelter",
+                        lang = "en",
+                        overview = "A man living in self-imposed exile on a remote island rescues a young girl from a violent storm, setting off a chain of events that forces him out of seclusion to protect her from enemies tied to his past.",
+                        image = "",
+                        posterImage = "",
+                        releaseDate = "2026-01-28"
+                    ),
+                    Movie(
+                        id = 12344,
+                        title = "History of the World: Part I",
+                        lang = "en",
+                        overview = "An uproarious version of history that proves nothing is sacred – not even the Roman Empire, the French Revolution and the Spanish Inquisition.",
+                        image = "",
+                        posterImage = "",
+                        releaseDate = "1981-06-12"
+                    )
                 )
             ),
-            onNavigateToDetails = { _, _ -> }
         )
     }
 }

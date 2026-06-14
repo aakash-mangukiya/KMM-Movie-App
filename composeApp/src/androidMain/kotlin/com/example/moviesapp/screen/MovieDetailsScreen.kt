@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -116,7 +117,7 @@ private fun MovieDetails(
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                             tint = colorProvider.backgroundColor.bg_white,
-                            contentDescription = ""
+                            contentDescription = stringResource(R.string.back)
                         )
                     }
                 }
@@ -133,7 +134,7 @@ private fun MovieDetails(
             uiState.error.isNullOrEmpty().not() -> {
                 ErrorView(
                     error = uiState.error
-                        ?: "An error occurred while fetching movie details. Please try again.",
+                        ?: stringResource(R.string.error_fetch_details),
                     onRetry = { onRetry() }
                 )
             }
@@ -217,7 +218,7 @@ private fun MovieDetails(
                                 end.linkTo(guideline, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            title = "Director",
+                            title = stringResource(R.string.label_director),
                             value = uiState.movieDetails?.director.orEmpty(),
                         )
 
@@ -228,7 +229,7 @@ private fun MovieDetails(
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            title = "Writer",
+                            title = stringResource(R.string.label_writer),
                             value = uiState.movieDetails?.writer.orEmpty(),
                         )
 
@@ -239,7 +240,7 @@ private fun MovieDetails(
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            text = "Cast: ",
+                            text = stringResource(R.string.label_cast),
                             style = typographyProvider.subHeadLine,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -269,7 +270,7 @@ private fun MovieDetails(
                                 end.linkTo(guideline, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            title = "Rate",
+                            title = stringResource(R.string.label_rate),
                             value = "${uiState.movieDetails?.voteAverage} / 10"
                         )
 
@@ -280,7 +281,7 @@ private fun MovieDetails(
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            title = "Status",
+                            title = stringResource(R.string.label_status),
                             value = uiState.movieDetails?.status.orEmpty()
                         )
 
@@ -291,7 +292,7 @@ private fun MovieDetails(
                                 end.linkTo(guideline, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            title = "Revenue",
+                            title = stringResource(R.string.label_revenue),
                             value = "${uiState.movieDetails?.revenue}"
                         )
 
@@ -302,7 +303,7 @@ private fun MovieDetails(
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            title = "Budget",
+                            title = stringResource(R.string.label_budget),
                             value = "${uiState.movieDetails?.budget}"
                         )
 
@@ -313,7 +314,7 @@ private fun MovieDetails(
                                 end.linkTo(parent.end, margin = spacingProvider.spacing_2)
                                 width = Dimension.fillToConstraints
                             },
-                            text = "Similar Movies: ",
+                            text = stringResource(R.string.label_similar_movies),
                             style = typographyProvider.subHeadLine,
                             overflow = TextOverflow.Ellipsis,
                         )

@@ -51,6 +51,7 @@ struct MovieRow: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(5)
             }
+            .frame(maxWidth: .infinity)
             .padding(8)
         }
         .background(

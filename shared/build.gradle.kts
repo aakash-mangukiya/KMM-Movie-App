@@ -67,10 +67,13 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.skie.annotations)
+            implementation(libs.androidx.datastore.preferences.core)
+            implementation(libs.okio)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
             implementation(libs.koin.android)
+            implementation(libs.ucrop)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

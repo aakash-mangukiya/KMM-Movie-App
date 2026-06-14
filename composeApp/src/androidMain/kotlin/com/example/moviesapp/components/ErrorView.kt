@@ -12,8 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.moviesapp.R
 import com.example.moviesapp.theme.LocalColorProvider
 import com.example.moviesapp.theme.LocalSpacingProvider
 import com.example.moviesapp.theme.LocalTypographyProvider
@@ -52,7 +54,7 @@ fun ErrorView(
             colors = ButtonDefaults.buttonColors(containerColor = colorProvider.backgroundColor.bg_strong)
         ) {
             Text(
-                text = "Retry",
+                text = stringResource(R.string.btn_retry),
                 style = typographyProvider.titleSmall,
                 color = colorProvider.textColor.text_white
             )
