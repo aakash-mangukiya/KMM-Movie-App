@@ -3,7 +3,7 @@
 A modern, cross-platform Movie application built with **Kotlin Multiplatform (KMP)**. This project demonstrates a shared business logic architecture across **Android (Jetpack Compose)** and **iOS (SwiftUI)**.
  
 ## 🚀 Features
-- **Shared Business Logic**: 100% of the networking, data mapping, and domain logic is shared.
+- **Shared Business Logic**: 100% of the networking, data mapping, local storage, and domain logic is shared.
 - **Android App**: Built using Jetpack Compose and Navigation3.
 - **iOS App**: Built using native SwiftUI, consuming shared ViewModels via Koin.
 - **Infinite Scrolling / Pagination**: Scalable pagination logic implemented in the shared layer to handle large data sets efficiently.
@@ -16,6 +16,7 @@ A modern, cross-platform Movie application built with **Kotlin Multiplatform (KM
 - **SwiftUI**: Used for the native iOS UI.
 - **Koin**: Dependency Injection for both platforms.
 - **Ktor**: Multiplatform networking client.
+- **Jetpack DataStore**: For reactive local data storage in the shared module.
 - **Kotlinx Serialization**: For JSON parsing and navigation.
 - **Coroutines & Flow**: Reactive state management.
 - **SKIE**: Enhanced Swift/Kotlin interoperability for Flows and Selections.
@@ -26,8 +27,9 @@ A modern, cross-platform Movie application built with **Kotlin Multiplatform (KM
 The project is divided into three main layers in the `:shared` module:
 
 ### 1. Data Layer
-- **Repositories**: Implementation of data fetching from TMDB API using Ktor.
-- **Mappers**: Converts raw API responses (`ResponseDTO`) into clean Domain models.
+- **Repositories**: Implementation of data fetching from TMDB API using Ktor and local storage using DataStore.
+- **DataStore**: Shared Preferences implementation using Jetpack DataStore for profile persistence.
+- **Mappers**: Converts raw API responses and local storage entities into clean Domain models.
 - **Models**: Serializable data classes for network requests.
 
 ### 2. Domain Layer
