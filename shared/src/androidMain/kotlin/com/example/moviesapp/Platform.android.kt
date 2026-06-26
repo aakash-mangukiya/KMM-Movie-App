@@ -97,7 +97,7 @@ class AndroidImageCropper(
         suspendCancellableCoroutine { cont ->
             val key = UUID.randomUUID().toString()
             val source = image.uri.toUri()
-            val dest = Uri.fromFile(File(activity.cacheDir, "crop_${System.currentTimeMillis()}.jpg"))
+            val dest = Uri.fromFile(File(activity.filesDir, "crop_${System.currentTimeMillis()}.jpg"))
             val intent = UCrop.of(source, dest).getIntent(activity)
 
             lateinit var launcher: ActivityResultLauncher<Intent>

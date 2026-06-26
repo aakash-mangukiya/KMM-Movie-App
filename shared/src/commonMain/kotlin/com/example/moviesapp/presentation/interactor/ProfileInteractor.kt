@@ -76,20 +76,20 @@ class ProfileInteractor(
     )
 
     private suspend fun pickFromGallery() {
-        val result = pickAndCropImageUseCase.fromGallery()
+        val result = pickAndCropImageUseCase.fromGallery() ?: return
         stateHandler.updateUiState {
             copy(
-                profileData = (profileData ?: createEmptyProfile()).copy(imageUrl = result?.uri.orEmpty()),
+                profileData = (profileData ?: createEmptyProfile()).copy(imageUrl = result.uri),
                 imageData = result
             )
         }
     }
 
     private suspend fun captureFromCamera() {
-        val result = pickAndCropImageUseCase.fromCamera()
+        val result = pickAndCropImageUseCase.fromCamera() ?: return
         stateHandler.updateUiState {
             copy(
-                profileData = (profileData ?: createEmptyProfile()).copy(imageUrl = result?.uri.orEmpty()),
+                profileData = (profileData ?: createEmptyProfile()).copy(imageUrl = result.uri),
                 imageData = result
             )
         }

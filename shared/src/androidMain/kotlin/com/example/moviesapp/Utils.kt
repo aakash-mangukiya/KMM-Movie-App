@@ -8,22 +8,28 @@ import com.example.moviesapp.domain.model.ImageData
 import java.io.File
 
 fun Context.toImageData(uri: Uri): ImageData {
-    val cursor = contentResolver.query(uri, null, null, null, null)
-
     var name: String? = null
     var size: Long? = null
+    var mime: String? = null
 
-    cursor?.use {
-        val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+    if (uri.scheme == "content") {
+        val cursor = contentResolver.query(uri, null, null, null, null)
 
-        if (it.moveToFirst()) {
-            name = it.getString(nameIndex)
-            size = it.getLong(sizeIndex)
+        cursor?.use {
+            val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+
+            if (it.moveToFirst()) {
+                if (nameIndex != -1) name = it.getString(nameIndex)
+                if (sizeIndex != -1) size = it.getLong(sizeIndex)
+            }
         }
+        mime = contentResolver.getType(uri)
+    } else if (uri.scheme == "file") {
+        val file = File(uri.path ?: "")
+        name = file.name
+        size = file.length()
     }
-
-    val mime = contentResolver.getType(uri)
 
     return ImageData(
         uri = uri.toString(),
@@ -34,7 +40,7 @@ fun Context.toImageData(uri: Uri): ImageData {
 }
 
 fun createTempImageUri(context: Context): Uri {
-    val file = File.createTempFile("camera_", ".jpg", context.cacheDir)
+    val file = File.createTempFile("camera_", ".jpg", context.filesDir)
     return FileProvider.getUriForFile(
         context,
         "${context.packageName}.provider",
